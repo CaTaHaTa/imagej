@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import net.java.sezpoz.Index;
@@ -139,6 +140,16 @@ public class ScriptService extends AbstractService {
 			catch (final InstantiationException e) {
 				Log.error("Invalid script language: " + item, e);
 			}
+		}
+
+		/*
+		 *  Now look for the ScriptEngines in javax.scripting. We only do that
+		 *  now since the javax.scripting framework does not provide all the
+		 *  functionality we might want to use in ImageJ2.
+		 */
+		final ScriptEngineManager manager = new javax.script.ScriptEngineManager();
+		for (final ScriptEngineFactory factory : manager.getEngineFactories()) {
+			scriptLanguageIndex.add(factory, true);
 		}
 	}
 
