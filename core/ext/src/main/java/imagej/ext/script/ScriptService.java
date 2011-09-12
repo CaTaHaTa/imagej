@@ -123,6 +123,10 @@ public class ScriptService extends AbstractService {
 		return language.getScriptEngine().eval(new FileReader(file));
 	}
 
+	public boolean isFileHandled(final File file) {
+		return scriptLanguageIndex.isFileHandled(file);
+	}
+
 	public void reloadScriptLanguages() {
 		scriptLanguageIndex.clear();
 		for (final IndexItem<ScriptLanguage, ScriptEngineFactory> item : Index
