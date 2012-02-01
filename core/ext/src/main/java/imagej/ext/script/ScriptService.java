@@ -45,9 +45,12 @@ import imagej.util.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -121,7 +124,9 @@ public class ScriptService extends AbstractService {
 			throw new UnsupportedOperationException(
 				"Could not determine language for file extension " + fileExtension);
 		}
-		return language.getScriptEngine().eval(new FileReader(file));
+		final ScriptEngine engine = language.getScriptEngine();
+		initialize(engine, file.getPath(), null, null);
+		return engine.eval(new FileReader(file));
 	}
 
 	public boolean isFileHandled(final File file) {
@@ -151,6 +156,15 @@ public class ScriptService extends AbstractService {
 		for (final ScriptEngineFactory factory : manager.getEngineFactories()) {
 			scriptLanguageIndex.add(factory, true);
 		}
+	}
+
+	public void initialize(final ScriptEngine engine, final String fileName,
+		final Writer writer, final Writer errorWriter)
+	{
+		engine.put(ScriptEngine.FILENAME, fileName);
+		final ScriptContext context = engine.getContext();
+		if (writer != null) context.setWriter(writer);
+		if (writer != null) context.setErrorWriter(errorWriter);
 	}
 
 }
