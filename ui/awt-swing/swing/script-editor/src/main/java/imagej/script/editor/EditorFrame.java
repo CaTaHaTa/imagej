@@ -103,7 +103,7 @@ public class EditorFrame extends JFrame implements ActionListener,
 	protected JTabbedPane tabbed;
 	protected EditorPane currentEditorPane;
 
-	protected JMenuItem newFile,
+	protected JMenuItem
 			open,
 			save,
 			saveas,
@@ -182,8 +182,6 @@ public class EditorFrame extends JFrame implements ActionListener,
 
 		final JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
-		newFile = addToMenu(fileMenu, "New", KeyEvent.VK_N, ctrl);
-		newFile.setMnemonic(KeyEvent.VK_N);
 		open = addToMenu(fileMenu, "Open...", KeyEvent.VK_O, ctrl);
 		open.setMnemonic(KeyEvent.VK_O);
 		openRecent = new RecentFilesMenuItem(this);
@@ -798,8 +796,7 @@ public class EditorFrame extends JFrame implements ActionListener,
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		final Object source = e.getSource();
-		if (source == newFile) createNewDocument();
-		else if (source == open) {
+		if (source == open) {
 			final EditorPane editorPane = getEditorPane();
 			final File defaultDir =
 				editorPane != null && editorPane.file != null ? editorPane.file
