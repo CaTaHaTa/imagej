@@ -34,8 +34,13 @@ POSSIBILITY OF SUCH DAMAGE.
 
 package imagej.script.editor;
 
+import imagej.ext.menu.MenuService;
+import imagej.ext.menu.ShadowMenu;
+import imagej.ext.plugin.PluginModuleInfo;
+import imagej.ext.plugin.PluginService;
 import imagej.ext.script.CompiledLanguage;
 import imagej.ext.script.ScriptService;
+import imagej.ext.ui.swing.SwingJMenuBarCreator;
 import imagej.util.FileUtils;
 import imagej.util.Log;
 
@@ -141,21 +146,38 @@ public class EditorFrame extends JFrame implements ActionListener,
 	protected JTextArea errorScreen = new JTextArea();
 
 	protected final String templateFolder = "templates/";
-	protected final ScriptService scriptService;
 	protected Map<ScriptEngineFactory, JRadioButtonMenuItem> languageMenuItems;
 
 	protected int compileStartOffset;
 	protected Position compileStartPosition;
 	protected ErrorHandler errorHandler;
 
-	public EditorFrame(final ScriptService scriptService, final File file) {
+	protected final ScriptService scriptService;
+	protected MenuService menuService;
+	protected PluginService pluginService;
+
+	public EditorFrame(final ScriptService scriptService,
+		final PluginService pluginService, final MenuService menuService,
+		final File file)
+	{
 		super("Script Editor");
 		this.scriptService = scriptService;
+		this.pluginService = pluginService;
+		this.menuService = menuService;
 
 		// Initialize menu
 		final int ctrl = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 		final int shift = ActionEvent.SHIFT_MASK;
 		final JMenuBar mbar = new JMenuBar();
+
+		final List<PluginModuleInfo<ScriptEditorPlugin>> plugins =
+			pluginService.getRunnablePluginsOfType(ScriptEditorPlugin.class);
+		for (final PluginModuleInfo<ScriptEditorPlugin> info : plugins) {
+			info.getPresets().put("editorFrame", this);
+		}
+		final ShadowMenu rootMenu = new ShadowMenu(menuService, plugins);
+		new SwingJMenuBarCreator().createMenus(rootMenu, mbar);
+
 		setJMenuBar(mbar);
 
 		final JMenu fileMenu = new JMenu("File");

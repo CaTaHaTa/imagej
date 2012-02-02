@@ -1,5 +1,5 @@
 //
-// ScriptEditor.java
+// ScriptEditorPlugin.java
 //
 
 /*
@@ -34,36 +34,11 @@ POSSIBILITY OF SUCH DAMAGE.
 
 package imagej.script.editor;
 
-import imagej.ext.menu.MenuService;
-import imagej.ext.plugin.ImageJPlugin;
-import imagej.ext.plugin.Menu;
-import imagej.ext.plugin.Parameter;
-import imagej.ext.plugin.Plugin;
-import imagej.ext.plugin.PluginService;
-import imagej.ext.script.ScriptService;
+import imagej.ext.plugin.RunnablePlugin;
 
 /**
- * The Script Editor. As plugin.
+ * The base interface for Script Editor plugins
  * 
  * @author Johannes Schindelin
  */
-@Plugin(menu = { @Menu(label = "File"), @Menu(label = "New"),
-	@Menu(label = "Script...", accelerator = "open_bracket") })
-public class ScriptEditor implements ImageJPlugin {
-
-	@Parameter
-	private ScriptService scriptService;
-
-	@Parameter
-	private PluginService pluginService;
-
-	@Parameter
-	private MenuService menuService;
-
-	@Override
-	public void run() {
-		new EditorFrame(scriptService, pluginService, menuService, null)
-			.setVisible(true);
-	}
-
-}
+public interface ScriptEditorPlugin extends RunnablePlugin {}
