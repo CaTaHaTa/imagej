@@ -103,9 +103,7 @@ public class EditorFrame extends JFrame implements ActionListener,
 	protected JTabbedPane tabbed;
 	protected EditorPane currentEditorPane;
 
-	protected JMenuItem
-			open,
-			save,
+	protected JMenuItem save,
 			saveas,
 			compileAndRun /* TODO! , compile */,
 			close, /* TODO! undo, redo, */
@@ -182,8 +180,6 @@ public class EditorFrame extends JFrame implements ActionListener,
 
 		final JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
-		open = addToMenu(fileMenu, "Open...", KeyEvent.VK_O, ctrl);
-		open.setMnemonic(KeyEvent.VK_O);
 		openRecent = new RecentFilesMenuItem(this);
 		openRecent.setMnemonic(KeyEvent.VK_R);
 		fileMenu.add(openRecent);
@@ -796,24 +792,7 @@ public class EditorFrame extends JFrame implements ActionListener,
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		final Object source = e.getSource();
-		if (source == open) {
-			final EditorPane editorPane = getEditorPane();
-			final File defaultDir =
-				editorPane != null && editorPane.file != null ? editorPane.file
-					.getParentFile() : FileUtils.getImageJDirectory();
-			final File file =
-				openWithDialog("Open...", defaultDir,
-					new String[] { ".class", ".jar" }, false);
-			if (file != null) new Thread() {
-
-				@Override
-				public void run() {
-					open(file);
-				}
-			}.start();
-			return;
-		}
-		else if (source == save) save();
+		if (source == save) save();
 		else if (source == saveas) saveAs();
 		// TODO! else if (source == makeJar) makeJar(false);
 		// TODO! else if (source == makeJarWithSource) makeJar(true);
@@ -1146,6 +1125,17 @@ public class EditorFrame extends JFrame implements ActionListener,
 		}
 		if (null != content) tab.editorPane.textArea.setText(content);
 		return tab;
+	}
+
+	public void open() {
+		final EditorPane editorPane = getEditorPane();
+		final File defaultDir =
+			editorPane != null && editorPane.file != null ? editorPane.file
+				.getParentFile() : FileUtils.getImageJDirectory();
+		final File file =
+			openWithDialog("Open...", defaultDir, new String[] { ".class", ".jar" },
+				false);
+		if (file != null) open(file);
 	}
 
 	public Tab open(final File file) {
