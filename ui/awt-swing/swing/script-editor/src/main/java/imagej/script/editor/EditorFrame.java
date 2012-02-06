@@ -103,9 +103,7 @@ public class EditorFrame extends JFrame implements ActionListener,
 	protected JTabbedPane tabbed;
 	protected EditorPane currentEditorPane;
 
-	protected JMenuItem save,
-			saveas,
-			compileAndRun /* TODO! , compile */,
+	protected JMenuItem compileAndRun /* TODO! , compile */,
 			close, /* TODO! undo, redo, */
 			cut,
 			copy,
@@ -183,10 +181,6 @@ public class EditorFrame extends JFrame implements ActionListener,
 		openRecent = new RecentFilesMenuItem(this);
 		openRecent.setMnemonic(KeyEvent.VK_R);
 		fileMenu.add(openRecent);
-		save = addToMenu(fileMenu, "Save", KeyEvent.VK_S, ctrl);
-		save.setMnemonic(KeyEvent.VK_S);
-		saveas = addToMenu(fileMenu, "Save as...", 0, 0);
-		saveas.setMnemonic(KeyEvent.VK_A);
 		fileMenu.addSeparator();
 		// TODO! makeJar = addToMenu(file, "Export as .jar", 0, 0);
 		// TODO! makeJar.setMnemonic(KeyEvent.VK_E);
@@ -792,11 +786,9 @@ public class EditorFrame extends JFrame implements ActionListener,
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		final Object source = e.getSource();
-		if (source == save) save();
-		else if (source == saveas) saveAs();
 		// TODO! else if (source == makeJar) makeJar(false);
 		// TODO! else if (source == makeJarWithSource) makeJar(true);
-		else if (source == compileAndRun) runText();
+		if (source == compileAndRun) runText();
 		// TODO! else if (source == compile) compile();
 		else if (source == runSelection) runText(true);
 		// TODO! else if (source == installMacro) installMacro();
