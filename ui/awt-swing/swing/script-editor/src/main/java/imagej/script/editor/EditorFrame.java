@@ -104,7 +104,7 @@ public class EditorFrame extends JFrame implements ActionListener,
 	protected EditorPane currentEditorPane;
 
 	protected JMenuItem compileAndRun /* TODO! , compile */,
-			close, /* TODO! undo, redo, */
+			/* TODO! undo, redo, */
 			cut,
 			copy,
 			paste,
@@ -181,14 +181,11 @@ public class EditorFrame extends JFrame implements ActionListener,
 		openRecent = new RecentFilesMenuItem(this);
 		openRecent.setMnemonic(KeyEvent.VK_R);
 		fileMenu.add(openRecent);
-		fileMenu.addSeparator();
 		// TODO! makeJar = addToMenu(file, "Export as .jar", 0, 0);
 		// TODO! makeJar.setMnemonic(KeyEvent.VK_E);
 		// TODO! makeJarWithSource = addToMenu(file, "Export as .jar (with source)",
 		// 0, 0);
 		// TODO! makeJarWithSource.setMnemonic(KeyEvent.VK_X);
-		fileMenu.addSeparator();
-		close = addToMenu(fileMenu, "Close", KeyEvent.VK_W, ctrl);
 
 		mbar.add(fileMenu);
 
@@ -811,17 +808,6 @@ public class EditorFrame extends JFrame implements ActionListener,
 		else if (source == kill) {
 			// TODO! chooseTaskToKill();
 		}
-		else if (source == close) {
-			if (tabbed.getTabCount() < 2) processWindowEvent(new WindowEvent(this,
-				WindowEvent.WINDOW_CLOSING));
-			else {
-				if (!handleUnsavedChanges()) return;
-				int index = tabbed.getSelectedIndex();
-				removeTab(index);
-				if (index > 0) index--;
-				switchTo(index);
-			}
-		}
 		else if (source == cut) getTextComponent().cut();
 		else if (source == copy) getTextComponent().copy();
 		else if (source == paste) getTextComponent().paste();
@@ -950,6 +936,18 @@ public class EditorFrame extends JFrame implements ActionListener,
 		else if (source == nextTab) switchTabRelative(1);
 		else if (source == previousTab) switchTabRelative(-1);
 		else if (handleTabsMenu(source)) return;
+	}
+
+	public void close() {
+		if (tabbed.getTabCount() < 2) processWindowEvent(new WindowEvent(this,
+			WindowEvent.WINDOW_CLOSING));
+		else {
+			if (!handleUnsavedChanges()) return;
+			int index = tabbed.getSelectedIndex();
+			removeTab(index);
+			if (index > 0) index--;
+			switchTo(index);
+		}
 	}
 
 	private int getNumber(final String string, final float fontSize, final int i)
