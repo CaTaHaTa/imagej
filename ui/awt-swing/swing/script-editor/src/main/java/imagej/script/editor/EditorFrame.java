@@ -132,7 +132,9 @@ public class EditorFrame extends JFrame implements ActionListener,
 			chooseFontSize/* TODO! , chooseTabSize,
 										gitGrep, loadToolsJar, openInGitweb, replaceTabsWithSpaces,
 										replaceSpacesWithTabs, toggleWhiteSpaceLabeling, zapGremlins */;
-	protected RecentFilesMenuItem openRecent;
+
+	protected RecentFilesService recentFilesService;
+
 	protected JMenu /* TODO! gitMenu, */tabsMenu, fontSizeMenu, /* TODO! tabSizeMenu, */
 	toolsMenu, runMenu/* TODO! , whiteSpaceMenu */;
 	protected int tabsMenuTabsStart;
@@ -176,18 +178,13 @@ public class EditorFrame extends JFrame implements ActionListener,
 
 		setJMenuBar(mbar);
 
-		final JMenu fileMenu = new JMenu("File");
-		fileMenu.setMnemonic(KeyEvent.VK_F);
-		openRecent = new RecentFilesMenuItem(this);
-		openRecent.setMnemonic(KeyEvent.VK_R);
-		fileMenu.add(openRecent);
+		recentFilesService = new RecentFilesService(this, rootMenu);
+
 		// TODO! makeJar = addToMenu(file, "Export as .jar", 0, 0);
 		// TODO! makeJar.setMnemonic(KeyEvent.VK_E);
 		// TODO! makeJarWithSource = addToMenu(file, "Export as .jar (with source)",
 		// 0, 0);
 		// TODO! makeJarWithSource.setMnemonic(KeyEvent.VK_X);
-
-		mbar.add(fileMenu);
 
 		final JMenu edit = new JMenu("Edit");
 		edit.setMnemonic(KeyEvent.VK_E);
@@ -1162,7 +1159,7 @@ public class EditorFrame extends JFrame implements ActionListener,
 					/* ignore */
 				}
 			}
-			if (file != null) openRecent.add(file.getAbsolutePath());
+			if (file != null) recentFilesService.add(file);
 
 			return tab;
 		}
@@ -1175,6 +1172,10 @@ public class EditorFrame extends JFrame implements ActionListener,
 			error("There was an error while opening '" + file + "': " + e);
 		}
 		return null;
+	}
+
+	public void clearRecentFiles() {
+		recentFilesService.clear();
 	}
 
 	public boolean saveAs() {
@@ -1206,7 +1207,7 @@ public class EditorFrame extends JFrame implements ActionListener,
 				"?", "Replace " + path + "?", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return false;
 		if (!write(file)) return false;
 		setFileName(file);
-		openRecent.add(path);
+		recentFilesService.add(file);
 		return true;
 	}
 
