@@ -40,7 +40,7 @@ import imagej.ext.plugin.Plugin;
 import imagej.script.editor.EditorFrame;
 import imagej.script.editor.ScriptEditorPlugin;
 
-@Plugin(type = ScriptEditorPlugin.class, menu = {
+@Plugin(menuRoot = "editor", type = ScriptEditorPlugin.class, menu = {
 	@Menu(label = "File", mnemonic = 'f'),
 	@Menu(label = "Close", mnemonic = 'o', accelerator = "ctrl W",
 		weight = FileNew.WEIGHT + 10) })
