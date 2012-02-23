@@ -137,6 +137,7 @@ public class ShadowMenuTest {
 
 	private void checkStructure(final ShadowMenu root) {
 		assertNull(root.getParent());
+		assertEquals(root, root.getRoot());
 
 		final List<ShadowMenu> rootChildren = checkNode(root, null, 8, -1, 2);
 
@@ -207,6 +208,7 @@ public class ShadowMenuTest {
 
 		for (ShadowMenu child : children) {
 			assertEquals(node, child.getParent());
+			assertEquals(node.getRoot(), child.getRoot());
 		}
 
 		return children;

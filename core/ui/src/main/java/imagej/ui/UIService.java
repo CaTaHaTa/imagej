@@ -42,6 +42,7 @@ import imagej.event.StatusService;
 import imagej.ext.InstantiableException;
 import imagej.ext.display.Display;
 import imagej.ext.menu.MenuService;
+import imagej.ext.menu.ShadowMenu;
 import imagej.ext.menu.event.MenuEvent;
 import imagej.ext.plugin.PluginInfo;
 import imagej.ext.plugin.PluginService;
