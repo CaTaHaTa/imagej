@@ -34,17 +34,19 @@ POSSIBILITY OF SUCH DAMAGE.
 
 package imagej.script.editor.plugins;
 
+import imagej.ext.menu.MenuConstants;
 import imagej.ext.plugin.Menu;
 import imagej.ext.plugin.Parameter;
 import imagej.ext.plugin.Plugin;
 import imagej.script.editor.EditorFrame;
 import imagej.script.editor.ScriptEditorPlugin;
-import imagej.ext.menu.MenuConstants;
 
-@Plugin(menuRoot = "editor", type = ScriptEditorPlugin.class, menu = {
-	@Menu(label = MenuConstants.FILE_LABEL, mnemonic = 'f'),
-	@Menu(label = RecentFilesMenuItem.MENU_NAME, mnemonic = 'o', weight = FileNew.WEIGHT + 2.5),
-	@Menu(label = "Clear list", mnemonic = 'l') })
+@Plugin(menuRoot = "editor", type = ScriptEditorPlugin.class,
+	menu = {
+		@Menu(label = MenuConstants.FILE_LABEL, mnemonic = 'f'),
+		@Menu(label = RecentFilesMenuItem.MENU_NAME, mnemonic = 'o',
+			weight = FileNew.WEIGHT + 2.5),
+		@Menu(label = "Clear list", mnemonic = 'l') })
 public class ClearRecentFiles extends RecentFilesMenuItem {
 
 	@Parameter

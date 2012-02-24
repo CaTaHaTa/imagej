@@ -35,9 +35,7 @@
 
 package imagej.ext.ui.swing;
 
-import imagej.event.EventHandler;
 import imagej.ext.menu.ShadowMenu;
-import imagej.ext.menu.event.MenuEvent;
 import imagej.util.Log;
 
 import javax.swing.JMenu;
@@ -50,6 +48,8 @@ import javax.swing.JMenuItem;
  * @author Curtis Rueden
  */
 public class SwingJMenuBarCreator extends AbstractSwingMenuCreator<JMenuBar> {
+
+	private final static String MENU_UPDATE_LISTENER = "menu update listener";
 
 	@Override
 	protected void addLeafToTop(final ShadowMenu shadow, final JMenuBar target) {
@@ -72,37 +72,20 @@ public class SwingJMenuBarCreator extends AbstractSwingMenuCreator<JMenuBar> {
 	}
 
 	@Override
-	public void createMenus(final ShadowMenu root, final JMenuBar target) {
-		super.createMenus(root, target);
-		final Object listener = new Object() {
-			// -- Event handlers --
+	protected void removeAll(final JMenuBar target) {
+		target.removeAll();
+	}
 
-			@SuppressWarnings("unused")
-			@EventHandler
-			protected void onEvent(final MenuEvent event)
-			{
-				// TODO - This rebuilds the entire menu structure whenever the
-				// menus change at all. Better would be to listen to MenusAddedEvent,
-				// MenusRemovedEvent and MenusUpdatedEvent separately and surgically
-				// adjust the menus accordingly. But this would require updates to
-				// the MenuCreator API to be more powerful.
-				boolean sameRoot = false;
-				for (final ShadowMenu menu : event.getItems()) {
-					if (menu.getRoot() == root) {
-						sameRoot = true;
-						break;
-					}
-				}
-				if (sameRoot) {
-					// throw away everything, at this point we cannot tell whether some item was removed
-					target.removeAll();
-					SwingJMenuBarCreator.super.createMenus(root, target);
-				}
-			}
-		};
-		root.getMenuService().getEventService().subscribe(listener);
-		// the event service has only a weak reference, so bind the listener to the JMenuBar
-		target.putClientProperty("remember this", listener);
+	@Override
+	protected Object getMenuUpdateListener(final JMenuBar target) {
+		return target.getClientProperty(MENU_UPDATE_LISTENER);
+	}
+
+	@Override
+	protected void setMenuUpdateListener(final JMenuBar target,
+		final Object object)
+	{
+		target.putClientProperty(MENU_UPDATE_LISTENER, object);
 	}
 
 }

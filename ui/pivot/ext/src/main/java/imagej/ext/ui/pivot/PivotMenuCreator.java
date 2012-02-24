@@ -136,4 +136,22 @@ public class PivotMenuCreator extends AbstractMenuCreator<BoxPane, MenuButton>
 		button.setEnabled(info.isEnabled());
 	}
 
+	@Override
+	protected void removeAll(BoxPane target) {
+		target.removeAll();
+		
+	}
+
+	@Override
+	protected Object getMenuUpdateListener(BoxPane target) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void setMenuUpdateListener(BoxPane target, Object object) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -34,13 +34,15 @@ POSSIBILITY OF SUCH DAMAGE.
 
 package imagej.script.editor.plugins;
 
-import java.io.File;
-
 import imagej.ext.plugin.Parameter;
 import imagej.script.editor.EditorFrame;
 import imagej.script.editor.ScriptEditorPlugin;
 
-public class RecentFilesMenuItem implements Comparable<RecentFilesMenuItem>, ScriptEditorPlugin {
+import java.io.File;
+
+public class RecentFilesMenuItem implements Comparable<RecentFilesMenuItem>,
+	ScriptEditorPlugin
+{
 
 	public final static String MENU_NAME = "Open Recent";
 
@@ -57,7 +59,8 @@ public class RecentFilesMenuItem implements Comparable<RecentFilesMenuItem>, Scr
 
 	@Override
 	public int compareTo(final RecentFilesMenuItem other) {
-		if (file == null || other.file == null) return file == other.file ? 0 : (file == null ? +1 : -1);
+		if (file == null || other.file == null) return file == other.file ? 0
+			: (file == null ? +1 : -1);
 		return file.compareTo(other.file);
 	}
 

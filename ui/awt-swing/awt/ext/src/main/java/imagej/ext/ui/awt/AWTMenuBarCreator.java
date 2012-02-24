@@ -40,6 +40,8 @@ import imagej.util.Log;
 
 import java.awt.Menu;
 import java.awt.MenuBar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Populates an AWT {@link MenuBar} with menu items from a {@link ShadowMenu}.
@@ -48,14 +50,19 @@ import java.awt.MenuBar;
  */
 public class AWTMenuBarCreator extends AbstractAWTMenuCreator<MenuBar> {
 
+	// Unfortunately, there is no way to find out when a MenuBar is about to be
+	// garbage-collected in order to remove the associated menu update listener.
+	// So we just hold on to all of them indefinitely for now.
+	private static Map<MenuBar, Object> menuUpdateListeners =
+		new HashMap<MenuBar, Object>();
+
 	@Override
 	protected void addLeafToTop(final ShadowMenu shadow, final MenuBar target) {
 		Log.warn("MenuBarCreator: Ignoring top-level leaf: " + shadow);
 	}
 
 	@Override
-	protected Menu
-		addNonLeafToTop(final ShadowMenu shadow, final MenuBar target)
+	protected Menu addNonLeafToTop(final ShadowMenu shadow, final MenuBar target)
 	{
 		final Menu menu = createNonLeaf(shadow);
 		target.add(menu);
@@ -65,6 +72,25 @@ public class AWTMenuBarCreator extends AbstractAWTMenuCreator<MenuBar> {
 	@Override
 	protected void addSeparatorToTop(final MenuBar target) {
 		Log.warn("MenuBarCreator: Ignoring top-level separator");
+	}
+
+	@Override
+	protected void removeAll(final MenuBar target) {
+		for (int i = target.getMenuCount() - 1; i >= 0; i--) {
+			target.remove(i);
+		}
+	}
+
+	@Override
+	protected Object getMenuUpdateListener(final MenuBar target) {
+		return menuUpdateListeners.get(target);
+	}
+
+	@Override
+	protected void
+		setMenuUpdateListener(final MenuBar target, final Object object)
+	{
+		menuUpdateListeners.put(target, object);
 	}
 
 }

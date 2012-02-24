@@ -48,29 +48,34 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-
 public class RecentFilesService {
+
 	protected EditorFrame editorFrame;
 	protected ShadowMenu rootMenu;
 	protected Map<File, PluginModuleInfo<ScriptEditorPlugin>> recentFiles;
 
-	public RecentFilesService(final EditorFrame editorFrame, final ShadowMenu rootMenu) {
+	public RecentFilesService(final EditorFrame editorFrame,
+		final ShadowMenu rootMenu)
+	{
 		this.editorFrame = editorFrame;
 		this.rootMenu = rootMenu;
-		recentFiles = new LinkedHashMap<File, PluginModuleInfo<ScriptEditorPlugin>>();
+		recentFiles =
+			new LinkedHashMap<File, PluginModuleInfo<ScriptEditorPlugin>>();
 	}
 
 	public void clear() {
 		final Set<PluginModuleInfo<?>> set = new HashSet<PluginModuleInfo<?>>();
-		for (final File file : recentFiles.keySet()) set.add(recentFiles.get(file));
+		for (final File file : recentFiles.keySet())
+			set.add(recentFiles.get(file));
 		rootMenu.removeAll(set);
 		recentFiles.clear();
 	}
 
 	public void add(final File file) {
 		final PluginModuleInfo<ScriptEditorPlugin> info =
-				new PluginModuleInfo<ScriptEditorPlugin>("imagej.script.editor.plugins.RecentFilesMenuItem",
-						ScriptEditorPlugin.class);
+			new PluginModuleInfo<ScriptEditorPlugin>(
+				"imagej.script.editor.plugins.RecentFilesMenuItem",
+				ScriptEditorPlugin.class);
 
 		// hard code path to open as a preset
 		final HashMap<String, Object> presets = new HashMap<String, Object>();
@@ -102,10 +107,10 @@ public class RecentFilesService {
 		}
 	}
 
-	private void setMenuPath(PluginModuleInfo<ScriptEditorPlugin> info,
-		File file, int index)
+	private void setMenuPath(final PluginModuleInfo<ScriptEditorPlugin> info,
+		final File file, final int index)
 	{
-		char mnemonic = (char)(index < 10 ? '0' + index : 0);
+		final char mnemonic = (char) (index < 10 ? '0' + index : 0);
 		info.setDescription(file.getPath());
 		final MenuPath menuPath = new MenuPath();
 		menuPath.add(new MenuEntry(MenuConstants.FILE_LABEL));

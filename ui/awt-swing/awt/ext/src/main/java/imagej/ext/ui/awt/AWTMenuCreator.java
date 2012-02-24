@@ -38,6 +38,8 @@ package imagej.ext.ui.awt;
 import imagej.ext.menu.ShadowMenu;
 
 import java.awt.Menu;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Populates an AWT {@link Menu} with menu items from a {@link ShadowMenu}.
@@ -45,6 +47,12 @@ import java.awt.Menu;
  * @author Curtis Rueden
  */
 public class AWTMenuCreator extends AbstractAWTMenuCreator<Menu> {
+
+	// Unfortunately, there is no way to find out when a MenuBar is about to be
+	// garbage-collected in order to remove the associated menu update listener.
+	// So we just hold on to all of them indefinitely for now.
+	private static Map<Menu, Object> menuUpdateListeners =
+		new HashMap<Menu, Object>();
 
 	@Override
 	protected void addLeafToTop(final ShadowMenu shadow, final Menu target) {
@@ -59,6 +67,23 @@ public class AWTMenuCreator extends AbstractAWTMenuCreator<Menu> {
 	@Override
 	protected void addSeparatorToTop(final Menu target) {
 		addSeparatorToMenu(target);
+	}
+
+	@Override
+	protected void removeAll(final Menu target) {
+		for (int i = target.getItemCount() - 1; i >= 0; i--) {
+			target.remove(i);
+		}
+	}
+
+	@Override
+	protected Object getMenuUpdateListener(final Menu target) {
+		return menuUpdateListeners.get(target);
+	}
+
+	@Override
+	protected void setMenuUpdateListener(final Menu target, final Object object) {
+		menuUpdateListeners.put(target, object);
 	}
 
 }

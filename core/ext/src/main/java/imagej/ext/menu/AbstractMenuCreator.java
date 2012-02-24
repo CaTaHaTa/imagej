@@ -71,6 +71,36 @@ public abstract class AbstractMenuCreator<T, M> implements MenuCreator<T> {
 				populateMenu(child, nonLeaf);
 			}
 		}
+
+		if (getMenuUpdateListener(target) != null) return;
+
+		final Object listener = new Object() {
+
+			// -- Event handlers --
+
+			@SuppressWarnings("unused")
+			@EventHandler
+			protected void onEvent(final MenuEvent event) {
+				// TODO - This rebuilds the entire menu structure whenever the
+				// menus change at all. Better would be to listen to MenusAddedEvent,
+				// MenusRemovedEvent and MenusUpdatedEvent separately and surgically
+				// adjust the menus accordingly. But this would require updates to
+				// the MenuCreator API to be more powerful.
+				boolean sameRoot = false;
+				for (final ShadowMenu menu : event.getItems()) {
+					if (menu.getRoot() == root) {
+						sameRoot = true;
+						break;
+					}
+				}
+				if (sameRoot) {
+					removeAll(target);
+					createMenus(root, target);
+				}
+			}
+		};
+		root.getMenuService().getEventService().subscribe(listener);
+		setMenuUpdateListener(target, listener);
 	}
 
 	private void populateMenu(final ShadowMenu shadow, final M target) {
@@ -101,5 +131,11 @@ public abstract class AbstractMenuCreator<T, M> implements MenuCreator<T> {
 	protected abstract void addSeparatorToMenu(M target);
 
 	protected abstract void addSeparatorToTop(T target);
+
+	protected abstract void removeAll(T target);
+
+	protected abstract Object getMenuUpdateListener(ShadowMenu menu, T target);
+
+	protected abstract void setMenuUpdateListener(ShadowMenu menu, T target, Object object);
 
 }
