@@ -35,7 +35,9 @@
 
 package imagej.ext.ui.swing;
 
+import imagej.event.EventHandler;
 import imagej.ext.menu.ShadowMenu;
+import imagej.ext.menu.event.MenuEvent;
 import imagej.util.Log;
 
 import javax.swing.JMenu;
@@ -67,6 +69,40 @@ public class SwingJMenuBarCreator extends AbstractSwingMenuCreator<JMenuBar> {
 	@Override
 	protected void addSeparatorToTop(final JMenuBar target) {
 		Log.debug("SwingJMenuBarCreator: Ignoring top-level separator");
+	}
+
+	@Override
+	public void createMenus(final ShadowMenu root, final JMenuBar target) {
+		super.createMenus(root, target);
+		final Object listener = new Object() {
+			// -- Event handlers --
+
+			@SuppressWarnings("unused")
+			@EventHandler
+			protected void onEvent(final MenuEvent event)
+			{
+				// TODO - This rebuilds the entire menu structure whenever the
+				// menus change at all. Better would be to listen to MenusAddedEvent,
+				// MenusRemovedEvent and MenusUpdatedEvent separately and surgically
+				// adjust the menus accordingly. But this would require updates to
+				// the MenuCreator API to be more powerful.
+				boolean sameRoot = false;
+				for (final ShadowMenu menu : event.getItems()) {
+					if (menu.getRoot() == root) {
+						sameRoot = true;
+						break;
+					}
+				}
+				if (sameRoot) {
+					// throw away everything, at this point we cannot tell whether some item was removed
+					target.removeAll();
+					SwingJMenuBarCreator.super.createMenus(root, target);
+				}
+			}
+		};
+		root.getMenuService().getEventService().subscribe(listener);
+		// the event service has only a weak reference, so bind the listener to the JMenuBar
+		target.putClientProperty("remember this", listener);
 	}
 
 }

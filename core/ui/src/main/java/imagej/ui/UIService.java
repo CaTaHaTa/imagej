@@ -106,8 +106,6 @@ public final class UIService extends AbstractService {
 		this.optionsService = optionsService;
 
 		launchUI();
-
-		subscribeToEvents(eventService);
 	}
 
 	// -- UIService methods --
@@ -244,21 +242,6 @@ public final class UIService extends AbstractService {
 	{
 		if (userInterface == null) return;
 		userInterface.showContextMenu(menuRoot, display, x, y);
-	}
-
-	// -- Event handlers --
-
-	@EventHandler
-	protected void onEvent(@SuppressWarnings("unused")
-	final MenuEvent event)
-	{
-		// TODO - This rebuilds the entire menu structure whenever the
-		// menus change at all. Better would be to listen to MenusAddedEvent,
-		// MenusRemovedEvent and MenusUpdatedEvent separately and surgically
-		// adjust the menus accordingly. But this would require updates to
-		// the MenuCreator API to be more powerful.
-		if (userInterface == null) return;
-		userInterface.createMenus();
 	}
 
 	// -- Helper methods --
