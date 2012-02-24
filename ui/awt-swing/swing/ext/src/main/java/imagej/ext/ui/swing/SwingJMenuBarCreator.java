@@ -54,7 +54,7 @@ public class SwingJMenuBarCreator extends AbstractSwingMenuCreator<JMenuBar> {
 	@Override
 	protected void addLeafToTop(final ShadowMenu shadow, final JMenuBar target) {
 		final JMenuItem menuItem = createLeaf(shadow);
-		target.add(menuItem);
+		addOrReplace(target, menuItem);
 	}
 
 	@Override
@@ -62,8 +62,29 @@ public class SwingJMenuBarCreator extends AbstractSwingMenuCreator<JMenuBar> {
 		addNonLeafToTop(final ShadowMenu shadow, final JMenuBar target)
 	{
 		final JMenu menu = createNonLeaf(shadow);
-		target.add(menu);
+		addOrReplace(target, menu);
 		return menu;
+	}
+
+	protected void addOrReplace(final JMenuBar target, final JMenuItem menuItem) {
+		for (int i = 0; i < target.getMenuCount(); i++) {
+			final JMenuItem currentItem = target.getMenu(i);
+			if (currentItem.getText().equals(menuItem.getText())) {
+				JMenuItem[] list = new JMenuItem[target.getMenuCount()];
+				for (int j = 0; j < list.length; j++) list[j] = target.getMenu(j);
+				list[i] = menuItem;
+				target.removeAll();
+				for (int j = 0; j < list.length; j++) {
+					if (list[j] instanceof JMenu) {
+						target.add((JMenu)list[j]);
+					} else {
+						target.add(list[j]);
+					}
+				}
+				return;
+			}
+		}
+		target.add(menuItem);
 	}
 
 	@Override
