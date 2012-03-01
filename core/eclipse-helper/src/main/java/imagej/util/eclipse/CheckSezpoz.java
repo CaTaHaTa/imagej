@@ -100,6 +100,13 @@ System.err.println("Running sezpoz annotation on " + directory);
 			System.err.println("Sources are not in the expected place: " + srcDirectory);
 			return false;
 		}
+
+		// before running, remove possibly outdated annotations
+		final File[] obsoleteAnnotations = new File(directory, "META-INF/annotations").listFiles();
+		if (obsoleteAnnotations != null) {
+			for (final File annotation : obsoleteAnnotations) annotation.delete();
+		}
+
 		List<String> aptArgs = new ArrayList<String>();
 		//aptArgs.add("-nocompile");
 		aptArgs.add("-factory");
