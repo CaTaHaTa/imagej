@@ -89,6 +89,12 @@
     </file>
     <file>
       <source>target/bin/i386-MacOSX-gcc/ij-launcher</source>
+      <outputDirectory>ImageJ64.app/Contents/MacOS/</outputDirectory>
+      <destName>ImageJ-tiger</destName>
+      <fileMode>0755</fileMode>
+    </file>
+    <file>
+      <source>target/bin/i386-MacOSX-gcc/ij-launcher</source>
       <outputDirectory>ImageJ32.app/Contents/MacOS/</outputDirectory>
       <destName>ImageJ-tiger</destName>
       <fileMode>0755</fileMode>
