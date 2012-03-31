@@ -179,7 +179,10 @@ public class AboutImageJ<T extends RealType<T> & NativeType<T>> implements
 	 * @return file path of the chosen image
 	 */
 	private File getRandomAboutImagePath() {
-		final File aboutDir = new File(FileUtils.getImageJDirectory(), "about");
+		File aboutDir = new File(FileUtils.getImageJDirectory(), "about");
+		if (!aboutDir.exists()) {
+			aboutDir = new File(FileUtils.getImageJDirectory(), "ui/app/src/main/assembly/application/about");
+		}
 		if (!aboutDir.exists()) {
 			// no "about" folder found
 			Log.warn("About folder '" + aboutDir.getPath() + "' does not exist.");
