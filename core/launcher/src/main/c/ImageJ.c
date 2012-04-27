@@ -1061,6 +1061,8 @@ static inline int prefixcmp(const char *string, const char *prefix)
 static inline int suffixcmp(const char *string, int len, const char *suffix)
 {
 	int suffix_len = strlen(suffix);
+	if (len < 0)
+		len = strlen(string);
 	if (len < suffix_len)
 		return -1;
 	return strncmp(string + len - suffix_len, suffix, suffix_len);
@@ -3995,7 +3997,7 @@ static int MAYBE_UNUSED is_dll(const char *path)
 	unsigned char *p;
 	off_t offset;
 
-	if (suffixcmp(path, strlen(path), ".dll"))
+	if (suffixcmp(path, -1, ".dll"))
 		return 0;
 
 	if ((in = open(path, O_RDONLY | O_BINARY)) < 0)
@@ -4028,7 +4030,7 @@ static int MAYBE_UNUSED is_elf(const char *path)
 	int in;
 	unsigned char buffer[0x40];
 
-	if (suffixcmp(path, strlen(path), ".so"))
+	if (suffixcmp(path, -1, ".so"))
 		return 0;
 
 	if ((in = open(path, O_RDONLY | O_BINARY)) < 0)
@@ -4051,8 +4053,8 @@ static int MAYBE_UNUSED is_dylib(const char *path)
 	int in;
 	unsigned char buffer[0x40];
 
-	if (suffixcmp(path, strlen(path), ".dylib") &&
-			suffixcmp(path, strlen(path), ".jnilib"))
+	if (suffixcmp(path, -1, ".dylib") &&
+			suffixcmp(path, -1, ".jnilib"))
 		return 0;
 
 	if ((in = open(path, O_RDONLY | O_BINARY)) < 0)
