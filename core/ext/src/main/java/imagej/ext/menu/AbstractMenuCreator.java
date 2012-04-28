@@ -72,7 +72,7 @@ public abstract class AbstractMenuCreator<T, M> implements MenuCreator<T> {
 			}
 		}
 
-		if (getMenuUpdateListener(target) != null) return;
+		if (getMenuUpdateListener(root, target) != null) return;
 
 		final Object listener = new Object() {
 
@@ -100,7 +100,7 @@ public abstract class AbstractMenuCreator<T, M> implements MenuCreator<T> {
 			}
 		};
 		root.getMenuService().getEventService().subscribe(listener);
-		setMenuUpdateListener(target, listener);
+		setMenuUpdateListener(root, target, listener);
 	}
 
 	private void populateMenu(final ShadowMenu shadow, final M target) {
