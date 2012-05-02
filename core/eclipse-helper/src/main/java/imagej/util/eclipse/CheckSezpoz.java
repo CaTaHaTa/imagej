@@ -1,7 +1,9 @@
 package imagej.util.eclipse;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -146,6 +148,50 @@ System.err.println("Running sezpoz annotation on " + directory);
 
 	protected static void touch(File file) throws IOException {
 		new FileOutputStream(file, true).close();
+	}
+
+	protected static void fixEclipseConfiguration(final File directory) {
+		fixFactoryPath(directory);
+		fixAnnotationProcessingSettings(directory);
+	}
+
+	protected static void fixFactoryPath(final File directory) {
+		final File factoryPath = new File(directory, ".factorypath");
+		boolean sezpoz = false, eclipse_helper = false;
+		String contents = null;
+		if (factoryPath.exists()) {
+			final BufferedReader reader = new BufferedReader(new FileReader(factoryPath));
+			StringBuilder builder = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (line.indexOf("sezpoz") > 0) sezpoz = true;
+				if (line.indexOf("eclipse-helper") > 0) eclipse_helper = true;
+				builder.append(line);
+			}
+			reader.close();
+			if (sezpoz && eclipse_helper) return;
+			contents = builder.toString();
+		}
+		else
+			contents = null;
+		if (contents == null || contents.length() < 2) {
+			contents = "<factorypath>\n</factorypath>\n";
+		int offset = contents.lastIndexOf('\n', contents.length() - 1);
+		if (!sezpoz) {
+			contents = contents.substring(0, offset)
+				+ "\n<factorypathentry kind=\"VARJAR\" id=\"M2_REPO/net/java/sezpoz/sezpoz/1.9/sezpoz-1.9.jar\" enabled=\"true\" runInBatchMode=\"true\"/>"
+				+ contents.substring(offset);
+		}
+		if (!eclipse_helper) {
+			contents = contents.substring(0, offset)
+			+ "\n<factorypathentry kind=\"VARJAR\" id=\"M2_REPO/net/imagej/ij-eclipse-helper/ij-eclipse-helper-2.0.0-SNAPSHOT.jar\" enabled=\"true\" runInBatchMode=\"true\"/>"
+			+ contents.substring(offset);
+		}
+		write(factoryPath, contents);
+	}
+
+	protected static void fixAnnotationProcessingSettings(File directory) {
+		// TODO Auto-generated method stub
 	}
 
 	public static <T> Iterable<T> iterate(final Enumeration<T> en) {
