@@ -40,8 +40,10 @@ import imagej.service.IService;
 import imagej.service.ServiceHelper;
 import imagej.service.ServiceIndex;
 import imagej.util.DefaultUncaughtExceptionHandler;
+import imagej.util.eclipse.CheckSezpoz;
 
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -61,6 +63,11 @@ public class ImageJ {
 	/** Creates a new ImageJ application context with all available services. */
 	public static ImageJ createContext() {
 		DefaultUncaughtExceptionHandler.install();
+		try {
+			if (!CheckSezpoz.check()) Log.error("Sezpoz generated annotations. You might need to restart for ImageJ2 to work properly");
+		} catch (IOException e) {
+			Log.error(e);
+		}
 		return createContext((List<Class<? extends IService>>) null);
 	}
 
