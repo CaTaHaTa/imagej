@@ -33,17 +33,23 @@
  * #L%
  */
 
-package imagej;
+package imagej.ext.display.ui;
+
+import imagej.ext.Priority;
+import imagej.ext.display.Display;
+import imagej.ext.plugin.Plugin;
 
 /**
- * This interface lets an object communicate the ImageJ instance
- * that was used to create it.
+ * A dummy {@link DisplayViewer} that does nothing, useful for testing.
  * 
- * @author Lee Kamentsky
+ * @author Curtis Rueden
  */
-public interface IContext {
+//@Plugin(type = DisplayViewer.class, priority = Priority.LAST_PRIORITY)
+public class HeadlessDisplayViewer extends AbstractDisplayViewer<Object> {
 
-	/** Gets the instance of ImageJ in which the object lives. */
-	ImageJ getContext();
+	@Override
+	public boolean canView(final Display<?> d) {
+		return true;
+	}
 
 }

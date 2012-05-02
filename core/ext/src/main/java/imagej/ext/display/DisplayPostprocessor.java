@@ -100,6 +100,7 @@ public class DisplayPostprocessor implements PostprocessorPlugin {
 			else {
 				// create a new display for the output
 				final Display<?> display = displayService.createDisplay(name, output);
+				System.out.println("Created display: " + display);//TEMP
 				if (display != null) displays.add(display);
 			}
 		}

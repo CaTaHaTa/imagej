@@ -88,6 +88,9 @@ public class DefaultEventService extends AbstractService
 	@Override
 	public <E extends ImageJEvent> void publish(final E e) {
 		e.setContext(getContext());
+		if (e.getClass().getName().equals("imagej.ext.display.event.DisplayCreatedEvent")) {
+			new Exception().printStackTrace();
+		}
 		eventBus.publish(e);
 	}
 

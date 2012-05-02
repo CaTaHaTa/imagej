@@ -33,17 +33,21 @@
  * #L%
  */
 
-package imagej;
+package imagej.ext.display;
+
+import imagej.ext.Priority;
+import imagej.ext.plugin.Plugin;
 
 /**
- * This interface lets an object communicate the ImageJ instance
- * that was used to create it.
+ * Default display for objects, when no other displays are available.
  * 
- * @author Lee Kamentsky
+ * @author Curtis Rueden
  */
-public interface IContext {
+@Plugin(type = Display.class, priority = Priority.VERY_LOW_PRIORITY)
+public class DefaultDisplay extends AbstractDisplay<Object> {
 
-	/** Gets the instance of ImageJ in which the object lives. */
-	ImageJ getContext();
+	public DefaultDisplay() {
+		super(Object.class);
+	}
 
 }

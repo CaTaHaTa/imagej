@@ -122,6 +122,7 @@ public class SwingUI extends AbstractSwingUI {
 			try {
 				final DisplayViewer<?> displayViewer = info.createInstance();
 				if (displayViewer.canView(display)) {
+					new Exception("Created viewer '" + displayViewer + "' for UI '" + this + "'").printStackTrace();//TEMP
 					final SwingDisplayWindow displayWindow = new SwingDisplayWindow();
 					displayViewer.view(displayWindow, display);
 					displayWindow.setTitle(display.getName());

@@ -33,18 +33,20 @@
  * #L%
  */
 
-package imagej.ui;
+package imagej.ext.display.ui;
 
-import imagej.ext.display.AbstractTextDisplay;
-import imagej.ext.display.TextDisplay;
-import imagej.ext.plugin.Plugin;
+import org.junit.Test;
 
 /**
- * Display for showing text onscreen.
+ * Tests {@link DisplayViewer}.
  * 
  * @author Curtis Rueden
  */
-@Plugin(type = TextDisplay.class)
-public class DefaultTextDisplay extends AbstractTextDisplay {
-	// no implementation needed
+public class DisplayViewerTest {
+
+	@Test
+	public void testDisplayViewer() {
+		//
+	}
+
 }

@@ -35,16 +35,20 @@
 
 package imagej.ext.display;
 
+import imagej.ext.Priority;
+import imagej.ext.plugin.Plugin;
+
 /**
- * Abstract superclass of {@link TextDisplay} implementations.
+ * Default display for text.
  * 
  * @author Curtis Rueden
  */
-public abstract class AbstractTextDisplay extends AbstractDisplay<String>
+@Plugin(type = TextDisplay.class, priority = Priority.LOW_PRIORITY)
+public class DefaultTextDisplay extends AbstractDisplay<String>
 	implements TextDisplay
 {
 
-	public AbstractTextDisplay() {
+	public DefaultTextDisplay() {
 		super(String.class);
 	}
 
