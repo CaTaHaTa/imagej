@@ -40,6 +40,7 @@ import imagej.service.IService;
 import imagej.service.ServiceHelper;
 import imagej.service.ServiceIndex;
 import imagej.util.DefaultUncaughtExceptionHandler;
+import imagej.util.Log;
 import imagej.util.eclipse.CheckSezpoz;
 
 import java.util.ArrayList;
