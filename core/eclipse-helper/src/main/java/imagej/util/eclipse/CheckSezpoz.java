@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -150,15 +152,16 @@ System.err.println("Running sezpoz annotation on " + directory);
 		new FileOutputStream(file, true).close();
 	}
 
-	protected static void fixEclipseConfiguration(final File directory) {
+	protected static void fixEclipseConfiguration(final File directory) throws IOException {
 		fixFactoryPath(directory);
 		fixAnnotationProcessingSettings(directory);
 	}
 
-	protected static void fixFactoryPath(final File directory) {
+	protected static void fixFactoryPath(final File directory) throws IOException {
 		final File factoryPath = new File(directory, ".factorypath");
 		boolean sezpoz = false, eclipse_helper = false;
 		String contents = null;
+		// TODO: use DOM
 		if (factoryPath.exists()) {
 			final BufferedReader reader = new BufferedReader(new FileReader(factoryPath));
 			StringBuilder builder = new StringBuilder();
@@ -176,6 +179,7 @@ System.err.println("Running sezpoz annotation on " + directory);
 			contents = null;
 		if (contents == null || contents.length() < 2) {
 			contents = "<factorypath>\n</factorypath>\n";
+		}
 		int offset = contents.lastIndexOf('\n', contents.length() - 1);
 		if (!sezpoz) {
 			contents = contents.substring(0, offset)
@@ -191,9 +195,14 @@ System.err.println("Running sezpoz annotation on " + directory);
 	}
 
 	protected static void fixAnnotationProcessingSettings(File directory) {
-		// TODO Auto-generated method stub
+		throw new RuntimeException("TODO"); // TODO
 	}
 
+	protected static void write(final File file, final String contents) throws IOException, UnsupportedEncodingException {
+		final OutputStream out = new FileOutputStream(file);
+		out.write(contents.getBytes("UTF-8"));
+		out.close();
+	}
 	public static <T> Iterable<T> iterate(final Enumeration<T> en) {
 		final Iterator<T> iterator = new Iterator<T>() {
 			public boolean hasNext() {
