@@ -639,7 +639,9 @@ public class UpdaterFrame extends JFrame implements TableModelListener,
 
 			@Override
 			public boolean matches(final FileObject file) {
+System.err.println("Looking at " + file);
 				if (file == updater) {
+System.err.println("YESSSSSSSSSSS");
 					file.setAction(files, Action.UPDATE);
 					return true;
 				}

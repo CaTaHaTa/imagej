@@ -163,6 +163,7 @@ public class ImageJUpdater implements UpdaterUIPlugin {
 				"There is an update available for the Updater. Install now?"))
 			{
 				// download just the updater
+System.err.println("update the updater");
 				main.updateTheUpdater();
 
 				main
